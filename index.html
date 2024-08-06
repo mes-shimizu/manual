@@ -298,7 +298,7 @@
                                             }
                                         </div>
                                         @*<!-- 次期開発まで封印 -->
-                                        <div class="arrow_blue t_center">
+<!--                                         <div class="arrow_blue t_center">
                                             <img src="~/Content/img/common/obj_arrow_blue.png" alt="">
                                         </div>
                                         <div class="lane_detail_area no_2">
@@ -386,15 +386,31 @@
 <!--             @if (Model.JobOrder != null && !GoStopResult.isError(Model.Result))
             { -->
                 <ul class="clearfix">
-                    @for (int num = 0; num < 2; num++)
-                    {
+                    <li>
+    					<h3>SW159</h3>
+    					<div class="truck">
+    						<img src="img/truck/truck_navy.svg" alt="トラック">
+    						<p class="number white">8970</p>
+    					</div>
+    					<p class="bay_number">30</p>
+    				</li>
+<!-- 				<li class="current">
+					<h3>SZ203</h3>
+					<div class="truck">
+						<img src="img/truck/truck_navy_pre.svg" alt="トラック">
+						<p class="number navy">3380</p>
+					</div>
+					<p class="bay_number">47/48</p>
+				</li> -->
+<!--                     @for (int num = 0; num < 2; num++) -->
+<!--                     { -->
 <!--                         if (String.IsNullOrEmpty(HtmlUtils.GetItemString(Model.JobOrder, num)))
                         {
                             // JobOrderがnullの場合は、該当レーン作業順欄を非表示にする(2024/07/16)
                             continue;
 <!--                         } -->
 <!--                         string current = HtmlUtils.GetItemBoolean(Model.MySelf, num) ? "current" : ""; --> -->
-                        <li class="@current">
+<!--                         <li class="@current">
                             <h3>@HtmlUtils.JobOrderLabel(Model.JobOrder, num)</h3>
                             @{
                                 string preJob = (HtmlUtils.GetItemBoolean(Model.JobOrderAssigned, num) ? "" : "pre");
@@ -427,13 +443,13 @@
                             </div>
                             <p class="bay_number">@HtmlUtils.GetItemString(Model.JobOrderBay, num)</p>
                         </li>
-                    }
+                    } -->
                 </ul>
             }
-            @if (GoStopResult.isError(Model.Result))
+<!--             @if (GoStopResult.isError(Model.Result))
             {
                 <p>@Words.Label_FetchFaild</p>
-            }
+            } -->
         </div>
 
     </section>
@@ -478,7 +494,7 @@
         </div>
     </div> -->
 
-    @Html.Partial("~/Views/_CommonDialog.cshtml")
+<!--     @Html.Partial("~/Views/_CommonDialog.cshtml") -->
 
 <!--     <script type="text/javascript">
         /*<![CDATA[*/
