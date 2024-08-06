@@ -142,12 +142,12 @@
             </ul>
         </div>
 
-        @if (LaneType.isAutomation(Model.LaneType))
+<!--         @if (LaneType.isAutomation(Model.LaneType))
         {
             if (!FlagString.isOn(Model.EnterPermission))
             {
                 if (Model.ErrMode == 1)
-                {
+                { -->
                     <div class="signal_fixed @show_message">
                         <div class="errsignal signal-ani1">
                             <img src="~/Content/img/mark/obj_ng.svg" alt="×マーク">
@@ -155,7 +155,7 @@
                             <p class="ng_lane red bold signal-ani2" id="error_message">@Html.Raw(Model.Message)</p>
                         </div>
                     </div>
-                }
+<!--                 }
                 else
                 {
                     <div class="signal_fixed @show_message">
@@ -363,37 +363,37 @@
                 </div>
             </div>
         }
-
+ -->
         <div class="blank"></div>
 
         <div class="job">
             <h2>レーンジョブ</h2>
             <div>
-                <h3>レーン&emsp;<span>@Model.JobLane</span></h3>
-                @if (!GoStopResult.isError(Model.Result))
-                {
-                    <p>本船：@(Model.LaneJobNumVsl)台／横持：@(Model.LaneJobNumShift)台／ゲート：@(Model.LaneJobNumGate)台</p>
-                }
+                <h3>レーン&emsp;<span>NC</span></h3>
+<!--                 @if (!GoStopResult.isError(Model.Result))
+                { -->
+                    <p>本船：0台／横持：0台／ゲート：2台</p>
+<!--                 }
                 else
                 {
                     <p>@Words.Label_FetchFaild</p>
-                }
+                } -->
             </div>
         </div>
 
         <div class="schedule">
             <h2><span>予定</span>レーン作業順</h2>
-            @if (Model.JobOrder != null && !GoStopResult.isError(Model.Result))
-            {
+<!--             @if (Model.JobOrder != null && !GoStopResult.isError(Model.Result))
+            { -->
                 <ul class="clearfix">
-                    @for (int num = 0; num < Model.JobOrder.Count; num++)
+                    @for (int num = 0; num < 2; num++)
                     {
-                        if (String.IsNullOrEmpty(HtmlUtils.GetItemString(Model.JobOrder, num)))
+<!--                         if (String.IsNullOrEmpty(HtmlUtils.GetItemString(Model.JobOrder, num)))
                         {
                             // JobOrderがnullの場合は、該当レーン作業順欄を非表示にする(2024/07/16)
                             continue;
-                        }
-                        string current = HtmlUtils.GetItemBoolean(Model.MySelf, num) ? "current" : "";
+<!--                         } -->
+<!--                         string current = HtmlUtils.GetItemBoolean(Model.MySelf, num) ? "current" : ""; --> -->
                         <li class="@current">
                             <h3>@HtmlUtils.JobOrderLabel(Model.JobOrder, num)</h3>
                             @{
