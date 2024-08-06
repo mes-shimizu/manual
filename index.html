@@ -100,7 +100,7 @@
         @{
             var show_message = "";
         }
-        @if (!String.IsNullOrEmpty(Model.InfoMessage))
+<!--         @if (!String.IsNullOrEmpty(Model.InfoMessage))
         {
             <div class="message">
                 @{
@@ -120,24 +120,24 @@
                     </div>
                 }
             </div>
-        }
+        } -->
         <div class="head_data @show_message">
             <ul>
                 <li>
                     <h2>ヘッドID.</h2>
-                    <p>@Model.TruckNo</p>
+                    <p>SZ203</p>
                 </li>
                 <li>
                     <h2>コンテナNo.</h2>
-                    <p>@Model.JobCntnrNo</p>
+                    <p>KKFU6953380</p>
                 </li>
                 <li>
                     <h2>レーンNo.</h2>
-                    <p>@Model.JobLane</p>
+                    <p>NC</p>
                 </li>
                 <li>
                     <h2>ベイNo.</h2>
-                    <p>@Model.JobBay</p>
+                    <p>47/48</p>
                 </li>
             </ul>
         </div>
