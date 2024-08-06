@@ -1,118 +1,745 @@
-<!doctype html>
-<html>
-<head>
-<meta charset="UTF-8">
-<meta name="robots" content="noindex"><!--インデックス拒否-->
-<meta name="format-detection" content="telephone=no" />
-<meta http-equiv="content-style-type" content="text/css">
-<meta http-equiv="content-script-type" content="text/javascript">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<!--スマホ時のみviewportでレスポンシブ設定 = タブレット表示対策-->
-<script type="text/javascript">
-	if ((navigator.userAgent.indexOf('iPhone') > 0) || navigator.userAgent.indexOf('iPod') > 0 || navigator.userAgent.indexOf('Android') > 0) {
-			document.write('<meta name="viewport" content="width=device-width, maximum-scale=1, user-scalable=no">');
-	}
-</script>
-<meta name="keywords" content="" />
-<meta name="description" content="" />
-<title>TRUCKER VIEW</title>
-<link href="img/common/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon"><!--favicon-->
-<link href="web_font_notosans/font.css" rel="stylesheet" type="text/css" /><!--font-japanese-->
-<link href="web_font_Roboto-Condensed/font.css" rel="stylesheet" type="text/css" /><!--font-english-->
-<link href="css/common/common.css" rel="stylesheet" type="text/css" /><!--共通CSS-->
-<link href="css/header_lane.css" rel="stylesheet" type="text/css" /><!--header_input-->
-<link href="css/lane_error.css" rel="stylesheet" type="text/css" /><!--ページ毎のCSS-->
-<script>
-	// スマートフォンのみで動作するように条件を追加、だがタブレットでも出てしまうケースあり
-	if ((navigator.userAgent.indexOf('iPhone') > 0) || navigator.userAgent.indexOf('iPod') > 0 || navigator.userAgent.indexOf('Android') > 0) {
-		window.addEventListener("orientationchange", function() {
-		if (window.orientation === 90 || window.orientation === -90) {
-			alert("【注】このアプリケーションは、スマートフォンで見る場合は必ず「縦向き」にしてください");
-			}
-		});
-	}
-</script>
-</head>
-<body>
-	
-	<header class="header_lane">
-		<div class="header_wrap">
-			<h1 class="eng bold blue">
-				<img class="logo_title" src="img/common/illust_track_title.svg" alt="トラックアイコン">
-				TRUCKER VIEW
-				<span class="jap normal black small">VERSION-1.0.0</span>
-				<span class="jap normal black small">RELEASE-2024.04.01</span>
-			</h1>
-			<div class="port_name eng bold bg_blue white">Shimizu Container Terminal</div>
-			<div class="update_time jap t_right">[ 更新日時 ]2023.10.5-14:15:22</div>
-			<div class="update">
-				<button class="white">
-					<img src="img/common/obj_update.svg" alt="更新ボタン">
-<!-- 					<span class="update_message tab">更新してください</span>
-					<span class="update_message sp">更新</span> -->
-				</button>
-			</div>
-			<div class="volume">
-				<button class="white">
-					<span>音量<br>確認</span>
-				</button>
-			</div>
-			<div class="btn_close white bold bg_blue white t_center">閉じる</div>
-			<div class="company_logo no_repeat"></div>
-		</div><!--header_wrap-->
-	</header><!--header_input-->
-	
-	
-	<section class="view_area">
-		<div class="head_data">
-			<ul>
-				<li>
-					<h2>ヘッドID.</h2>
-					<p>AR123</p>
-				</li>
-				<li>
-					<h2>コンテナNo.</h2>
-					<p>TGBU4463824</p>
-				</li>
-				<li>
-					<h2>レーンNo.</h2>
-					<p>1E</p>
-				</li>
-				<li>
-					<h2>ベイNo.</h2>
-					<p>21/22</p>
-				</li>
-			</ul>
-		</div><!--head_data-->
-		<div class="signal">
-			<img src="img/mark/obj_ng.svg" alt="×マーク">
-			<img class="flicker" src="img/mark/obj_ng_hover.svg" alt="○マーク"><!--フリック時の○マーク-->
-			<p class="ok_lane red bold">システムエラー(E3)</p>
-<!-- 			<p class="attention">更新ボタンをタッチしてください</p> -->
-		</div><!--signal-->
-		
-		<div class="blank"></div>
-		
-		<div class="job">
-			<h2>レーンジョブ</h2>
-			<div>
-				<h3>レーン&emsp;<span>1E</span></h3>
-				<p>本船：0台／横持：0台／ゲート：0台</p>
-			</div>
-		</div><!--job-->
-		
-		<div class="schedule">
-			<h2><span>予定</span>レーン作業順</h2>
-			<ul class="clearfix">
-				
-			</ul>
-		</div><!--schedule-->
-		
-		
-	</section><!--view_area-->
+﻿@using TruckerView.Models
+@using TruckerView.Define
+@using TruckerView.Utils
 
-	
-<script src="js/html5shiv.js"></script>
-<script src="js/jquery-3.6.1.min.js" type="text/javascript"></script>
+@model TruckerViewLaneModel
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex">
+    <meta name="format-detection" content="telephone=no" />
+    <meta http-equiv="content-language" content="ja">
+    <meta http-equiv="content-style-type" content="text/css">
+    <meta http-equiv="content-script-type" content="text/javascript">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <script type="text/javascript">
+        if ((navigator.userAgent.indexOf('iPhone') > 0) || navigator.userAgent.indexOf('iPod') > 0
+            || (navigator.userAgent.indexOf('Android') > 0 && navigator.userAgent.indexOf('Mobile') > 0)) {
+            document.write('<meta name="viewport" content="width=device-width, initial-scale=1">');
+        }
+    </script>
+    <meta name="keywords" content="" />
+    <meta name="description" content="" />
+    <title>TRUCKER VIEW</title>
+    <link href="~/Content/img/common/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon">
+    <link href="~/Content/web_font_notosans/font.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/web_font_Roboto-Condensed/font.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/css/common/common.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/css/header_lane.css" rel="stylesheet" type="text/css" />
+    @if (LaneType.isAutomation(Model.LaneType))
+    {
+        if (!FlagString.isOn(Model.EnterPermission))
+        {
+            <link href="~/Content/css/lane_remote_ng.css" rel="stylesheet" type="text/css" />
+        }
+        else
+        {
+            <link href="~/Content/css/lane_remote_ok.css" rel="stylesheet" type="text/css" />
+        }
+    }
+    else if (LaneType.isManned(Model.LaneType))
+    {
+        <link href="~/Content/css/lane_manned.css" rel="stylesheet" type="text/css" />
+    }
+    else if (LaneType.isEmptyVan(Model.LaneType))
+    {
+        <link href="~/Content/css/lane_empty.css" rel="stylesheet" type="text/css" />
+    }
+    else
+    {
+        <link href="~/Content/css/lane_remote_ok.css" rel="stylesheet" type="text/css" />
+    }
+    <link rel="stylesheet" href="~/Content/css/trucker-view.css" />
+    @Scripts.Render("~/Content/js/jquery-3.6.1.min.js")
+</head>
+<body style="display: none;">
+
+    @Html.Partial("~/Views/_SpOrientationWarning.cshtml")
+
+    <form action="~/Lane" method="post" target="_self">
+        @Html.AntiForgeryToken()
+        <input type="hidden" id="TruckNo" name="TruckNo" value="@Model.TruckNo" />
+        <input type="hidden" id="EnterPermission" name="EnterPermission" value="@Model.EnterPermission" />
+        <input type="hidden" id="ChangedPermission" name="ChangedPermission" value="@Model.ChangedPermission" />
+        <input type="hidden" id="CheckedPermission" name="CheckedPermission" value="@Model.CheckedPermission" />
+        <input type="hidden" id="SelfPost" name="SelfPost" value="@FlagString.ON" />
+        <input type="hidden" id="AutoSubmitFlg" name="AutoSubmitFlg" value="@Model.AutoSubmitFlg" />
+    </form>
+    <form action="~/Lane/Back" method="get" target="_self">
+    </form>
+    <input type="hidden" id="ErrMode" name="ErrMode" value="@Model.ErrMode" />
+    <header class="header_lane">
+        <div class="header_wrap">
+            <h1 class="eng bold blue">
+                <img class="logo_title" src="~/Content/img/common/illust_track_title.svg" alt="トラックアイコン">
+                TRUCKER VIEW
+                <span class="jap normal black small">VERSION-@Model.TruckerViewVersion</span>
+                <span class="jap normal black small">RELEASE-@Model.ReleaseDate</span>
+            </h1>
+            <div class="port_name eng bold bg_blue white">Shimizu Container Terminal</div>
+            <div class="update_time jap t_right">[ 更新日時 ]@Model.Timestamp.ToString("yyyy.M.d-HH:mm:ss")</div>
+            <div class="company_logo no_repeat"></div>
+            <div class="return">
+                <button class="white" id="bt_back">
+                    <img src="~/Content/img/common/obj_return.svg" alt="戻るボタン">
+                </button>
+            </div>
+            <div class="update">
+                <button class="white" id="bt_refresh">
+                    <img src="~/Content/img/common/obj_update.svg" alt="更新ボタン">
+                    <span class="update_message tab">更新が必要です</span>
+                    <span class="update_message sp">更新</span>
+                </button>
+            </div>
+            <div class="volume">
+                <button class="white soundcheck" id="bt_sound_test">
+                    <span class="on">音量<br>確認</span>
+                    <span class="off">停止</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <section class="view_area">
+        @{
+            var show_message = "";
+        }
+        @if (!String.IsNullOrEmpty(Model.InfoMessage))
+        {
+            <div class="message">
+                @{
+                    show_message = "show-message";
+                    var bytesCount = HtmlUtils.GetSjisBytesLen(Model.InfoMessage);
+                    var mesCount = 1;
+                    if (bytesCount > 0)
+                    {
+                        mesCount = (220 / (bytesCount + 6)) + 2;
+                    }
+                }
+                @for (int idx = 0; idx < mesCount; idx++)
+                {
+                    <div class="loop_right_double">
+                        <img class="info-icon" src="~/Content/img/common/icon_message.svg" alt="アイコン">
+                        @Model.InfoMessage
+                    </div>
+                }
+            </div>
+        }
+        <div class="head_data @show_message">
+            <ul>
+                <li>
+                    <h2>ヘッドID.</h2>
+                    <p>@Model.TruckNo</p>
+                </li>
+                <li>
+                    <h2>コンテナNo.</h2>
+                    <p>@Model.JobCntnrNo</p>
+                </li>
+                <li>
+                    <h2>レーンNo.</h2>
+                    <p>@Model.JobLane</p>
+                </li>
+                <li>
+                    <h2>ベイNo.</h2>
+                    <p>@Model.JobBay</p>
+                </li>
+            </ul>
+        </div>
+
+        @if (LaneType.isAutomation(Model.LaneType))
+        {
+            if (!FlagString.isOn(Model.EnterPermission))
+            {
+                if (Model.ErrMode == 1)
+                {
+                    <div class="signal_fixed @show_message">
+                        <div class="errsignal signal-ani1">
+                            <img src="~/Content/img/mark/obj_ng.svg" alt="×マーク">
+                            <img class="flicker signal-ani3" src="~/Content/img/mark/obj_ng_hover.svg" alt="×マーク">
+                            <p class="ng_lane red bold signal-ani2" id="error_message">@Html.Raw(Model.Message)</p>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="signal_fixed @show_message">
+                        <div class="signal">
+                            <img src="~/Content/img/mark/obj_ng.svg" alt="×マーク">
+                            <p class="ng_lane red bold"><span>@Model.JobLane@Model.JobBay</span>進入不可</p>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="signal_fixed @show_message">
+                    <div class="signal signal-ani1" id="pnl_signal_ani">
+                        <p class="no_sound_text green signal-ani2" id="p_no_sound_text">　</p>
+                        <img src="~/Content/img/mark/obj_ok_circle.svg" alt="○マーク">
+                        <img class="flicker signal-ani3" src="~/Content/img/mark/obj_ok_circle_hover.svg" alt="○マーク" id="img_flicker">
+                        <p class="ok_lane green bold signal-ani2" id="p_ok_lane"><span>@Model.JobLane@Model.JobBay</span>進入可</p>
+                        <p class="attention signal-ani4" id="p_attention">交通整理員がいる場合は指示に従ってください</p>
+                    </div>
+                    <div class="signal" style="display: none;" id="pnl_signal">
+                        <p class="no_sound_text green" id="p_no_sound_text">　</p>
+                        <img src="~/Content/img/mark/obj_ok_circle.svg" alt="○マーク">
+                        <img class="flicker" src="~/Content/img/mark/obj_ok_circle_hover.svg" alt="○マーク" id="img_flicker">
+                        <p class="ok_lane green bold" id="p_ok_lane"><span>@Model.JobLane@Model.JobBay</span>進入可</p>
+                        <p class="attention" id="p_attention">交通整理員がいる場合は指示に従ってください</p>
+                    </div>
+                </div>
+            }
+            if (Model.ErrMode != 1)
+            {
+                int RTGNOCount = 1;
+                if (!GoStopResult.isError(Model.Result) && Model.RTGNO != null)
+                {
+                    RTGNOCount = Model.RTGNO.Count;
+                }
+                <div class="lane_view">
+                    <ul>
+                        @for (int idx = 0; idx < RTGNOCount; idx++)
+                        {
+                            if (!GoStopResult.isError(Model.Result) && String.IsNullOrEmpty(HtmlUtils.GetItemString(Model.RTGNO, idx)))
+                            {
+                                // APエラーでなく、かつ、RTGNOがnullの場合は、該当RTG欄を非表示にする(2024/06/12)
+                                continue;
+                            }
+                            <li>
+                                <div class="lane_number">@(!GoStopResult.isError(Model.Result) ? HtmlUtils.StringIfFormat("TT{0}", HtmlUtils.GetItemString(Model.RTGNO, idx)) : null)</div>
+                                <div class="lane_illust_area">
+                                    <div class="lane_illust">
+                                        <img src="~/Content/img/common/illust_lane.svg" alt="レーン">
+                                    </div>
+                                    @if (!GoStopResult.isError(Model.Result) && !String.IsNullOrEmpty(HtmlUtils.GetItemString(Model.CurJobType, idx)))
+                                    {
+                                        string preLane = (HtmlUtils.GetItemBoolean(Model.CurJobCntnrFlg, idx) ? "" : "pre");
+                                        string colorLane = (HtmlUtils.GetItemBoolean(Model.CurJobCntnrFlg, idx) ? "white" : "navy");
+                                        <div class="lane_truck @preLane">
+                                            @if (JobTypeShort.isVessel(HtmlUtils.GetItemString(Model.CurJobType, idx)) || JobTypeShort.isShift(HtmlUtils.GetItemString(Model.CurJobType, idx)))
+                                            {
+                                                if (HtmlUtils.GetItemBoolean(Model.CurJobCntnrFlg, idx))
+                                                {
+                                                    <img src="~/Content/img/truck/truck_gray.svg" alt="トラック">
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/Content/img/truck/truck_gray_pre.svg" alt="トラック">
+                                                }
+                                            }
+                                            else
+                                            {
+                                                if (HtmlUtils.GetItemBoolean(Model.CurJobCntnrFlg, idx))
+                                                {
+                                                    <img src="~/Content/img/truck/truck_navy.svg" alt="トラック">
+                                                }
+                                                else
+                                                {
+                                                    <img src="~/Content/img/truck/truck_navy_pre.svg" alt="トラック">
+                                                }
+                                            }
+                                            <p class="truck_number @colorLane">@HtmlUtils.ShortCtntnrNo(HtmlUtils.GetItemString(Model.CurJobCntnrNo, idx))</p>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="lane_detail_wrap">
+                                    @if (!String.IsNullOrEmpty(HtmlUtils.GetItemString(Model.CurJobBay, idx)))
+                                    {
+                                        <div class="lane_detail_area no_1">
+                                            <div class="detail_number">1</div>
+                                            @if (!GoStopResult.isError(Model.Result))
+                                            {
+                                                <p class="up_text">@HtmlUtils.GetItemString(Model.CurJobBay, idx)-@HtmlUtils.GetItemString(Model.CurJobRow, idx)-@HtmlUtils.GetItemString(Model.CurJobTier, idx)</p>
+                                                <p class="bottom_text">
+                                                    @*/* 202/06/04付 ジョブ詳細欄の表示仕様変更対応前のコード */
+                                                    @if (JobTypeShort.isVessel(HtmlUtils.GetItemString(Model.CurJobType, idx)))
+                                                    {
+                                                        <span>@HtmlUtils.ShortTruckNo(HtmlUtils.GetItemString(Model.CurJobTruckNo, idx))</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>@HtmlUtils.GetItemString(Model.CurJobTruckNo, idx)</span>
+                                                    }
+                                                    @if (!String.IsNullOrEmpty(HtmlUtils.GetItemString(Model.CurJobTruckNo, idx)))
+                                                    {
+                                                        <span>&emsp;</span>
+                                                    }
+                                                    <span>@HtmlUtils.GetItemString(Model.CurJobDetail, idx)</span>*@
+
+                                                    @if (JobTypeShort.isVessel(HtmlUtils.GetItemString(Model.CurJobType, idx)))
+                                                    {
+                                                        <span>@JobType.getLabel(JobType.VESSEL)</span>
+                                                    }
+                                                    else if (JobTypeShort.isShift(HtmlUtils.GetItemString(Model.CurJobType, idx)))
+                                                    {
+                                                        <span>@JobType.getLabel(JobType.SHIFT)</span>
+                                                    }
+                                                    else if (JobTypeShort.isGate(HtmlUtils.GetItemString(Model.CurJobType, idx)))
+                                                    {
+                                                        <span>@HtmlUtils.GetItemString(Model.CurJobDetail, idx)</span>
+                                                    }
+
+                                                    @if (JobTypeShort.isVessel(HtmlUtils.GetItemString(Model.CurJobType, idx))
+                                                        || JobTypeShort.isShift(HtmlUtils.GetItemString(Model.CurJobType, idx))
+                                                        || (JobTypeShort.isGate(HtmlUtils.GetItemString(Model.CurJobType, idx)) && !String.IsNullOrEmpty(HtmlUtils.GetItemString(Model.CurJobDetail, idx))))
+                                                    {
+                                                        <span>&emsp;</span>
+                                                    }
+                                                    @if (JobTypeShort.isVessel(HtmlUtils.GetItemString(Model.CurJobType, idx))
+                                                        || JobTypeShort.isShift(HtmlUtils.GetItemString(Model.CurJobType, idx)))
+                                                    {
+                                                        <span>@HtmlUtils.GetItemString(Model.CurJobDetail, idx)</span>
+                                                    }
+                                                    else if (JobTypeShort.isGate(HtmlUtils.GetItemString(Model.CurJobType, idx)))
+                                                    {
+                                                        <span>@HtmlUtils.GetItemString(Model.CurJobTruckNo, idx)</span>
+                                                    }
+                                                </p>
+                                            }
+                                            else
+                                            {
+                                                <p class="up_text">@Words.Label_FetchFaild</p>
+                                            }
+                                        </div>
+                                        @*<!-- 次期開発まで封印 -->
+                                        <div class="arrow_blue t_center">
+                                            <img src="~/Content/img/common/obj_arrow_blue.png" alt="">
+                                        </div>
+                                        <div class="lane_detail_area no_2">
+                                            <div class="detail_number">2</div>
+                                            @if (!GoStopResult.isError(Model.Result))
+                                            {
+                                                <p class="up_text">@HtmlUtils.GetItemString(Model.NextJobBay, idx)-@HtmlUtils.GetItemString(Model.NextJobRow, idx)-@HtmlUtils.GetItemString(Model.NextJobTier, idx)</p>
+                                                <p class="bottom_text">
+                                                    <span>@HtmlUtils.GetItemString(Model.NextJobTruckNo, idx)</span>&emsp;
+                                                    <span>@HtmlUtils.GetItemString(Model.NextJobDetail, idx)</span>
+                                                </p>
+                                            }
+                                            else
+                                            {
+                                                <p class="up_text">@Words.Label_FetchFaild</p>
+                                            }
+                                        </div>*@
+                                    }
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            }
+        }
+
+        @if (LaneType.isManned(Model.LaneType))
+        {
+            <div class="signal_fixed @show_message">
+                <div class="signal signal-ani1" id="pnl_signal_ani">
+                    <img src="~/Content/img/mark/obj_ok_circle.svg" alt="○マーク">
+                    <img class="flicker signal-ani3" src="~/Content/img/mark/obj_ok_circle_hover.svg" alt="○マーク" id="img_flicker">
+                    <p class="ok_lane green bold signal-ani2">@JobLane.getYardName(Model.JobLane) 有人レーンです</p>
+                    <p class="ok_lane green bold signal-ani2" id="p_ok_lane"><span>@Model.JobLane@Model.JobBay</span>進入可</p>
+                    <p class="attention signal-ani4" id="p_attention">交通整理員がいる場合は指示に従ってください</p>
+                </div>
+                <div class="signal" style="display: none;" id="pnl_signal">
+                    <img src="~/Content/img/mark/obj_ok_circle.svg" alt="○マーク">
+                    <img class="flicker" src="~/Content/img/mark/obj_ok_circle_hover.svg" alt="○マーク" id="img_flicker">
+                    <p class="ok_lane green bold">@JobLane.getYardName(Model.JobLane) 有人レーンです</p>
+                    <p class="ok_lane green bold" id="p_ok_lane"><span>@Model.JobLane@Model.JobBay</span>進入可</p>
+                    <p class="attention" id="p_attention">交通整理員がいる場合は指示に従ってください</p>
+                </div>
+            </div>
+        }
+        @if (LaneType.isEmptyVan(Model.LaneType))
+        {
+            <div class="signal_fixed @show_message">
+                <div class="signal signal-ani1" id="pnl_signal_ani">
+                    <img src="~/Content/img/mark/obj_ok_circle.svg" alt="○マーク">
+                    <img class="flicker signal-ani3" src="~/Content/img/mark/obj_ok_circle_hover.svg" alt="○マーク" id="img_flicker">
+                    <p class="ok_lane green bold signal-ani2">@JobLane.getYardName(Model.JobLane) 空バンレーンです</p>
+                    <p class="ok_lane green bold signal-ani2" id="p_ok_lane"><span>@Model.JobLane@Model.JobBay</span>進入可</p>
+                    <p class="attention signal-ani4" id="p_attention">交通整理員がいる場合は指示に従ってください</p>
+                </div>
+                <div class="signal" style="display: none;" id="pnl_signal">
+                    <img src="~/Content/img/mark/obj_ok_circle.svg" alt="○マーク">
+                    <img class="flicker" src="~/Content/img/mark/obj_ok_circle_hover.svg" alt="○マーク" id="img_flicker">
+                    <p class="ok_lane green bold">@JobLane.getYardName(Model.JobLane) 空バンレーンです</p>
+                    <p class="ok_lane green bold" id="p_ok_lane"><span>@Model.JobLane@Model.JobBay</span>進入可</p>
+                    <p class="attention" id="p_attention">交通整理員がいる場合は指示に従ってください</p>
+                </div>
+            </div>
+        }
+
+        <div class="blank"></div>
+
+        <div class="job">
+            <h2>レーンジョブ</h2>
+            <div>
+                <h3>レーン&emsp;<span>@Model.JobLane</span></h3>
+                @if (!GoStopResult.isError(Model.Result))
+                {
+                    <p>本船：@(Model.LaneJobNumVsl)台／横持：@(Model.LaneJobNumShift)台／ゲート：@(Model.LaneJobNumGate)台</p>
+                }
+                else
+                {
+                    <p>@Words.Label_FetchFaild</p>
+                }
+            </div>
+        </div>
+
+        <div class="schedule">
+            <h2><span>予定</span>レーン作業順</h2>
+            @if (Model.JobOrder != null && !GoStopResult.isError(Model.Result))
+            {
+                <ul class="clearfix">
+                    @for (int num = 0; num < Model.JobOrder.Count; num++)
+                    {
+                        if (String.IsNullOrEmpty(HtmlUtils.GetItemString(Model.JobOrder, num)))
+                        {
+                            // JobOrderがnullの場合は、該当レーン作業順欄を非表示にする(2024/07/16)
+                            continue;
+                        }
+                        string current = HtmlUtils.GetItemBoolean(Model.MySelf, num) ? "current" : "";
+                        <li class="@current">
+                            <h3>@HtmlUtils.JobOrderLabel(Model.JobOrder, num)</h3>
+                            @{
+                                string preJob = (HtmlUtils.GetItemBoolean(Model.JobOrderAssigned, num) ? "" : "pre");
+                                string colorJob = (HtmlUtils.GetItemBoolean(Model.JobOrderCntnrFlg, num) ? "white" : "navy");
+                            }
+                            <div class="truck @preJob">
+                                @if (JobType.isVessel(HtmlUtils.GetItemString(Model.JobOrder, num)) || JobType.isShift(HtmlUtils.GetItemString(Model.JobOrder, num)))
+                                {
+                                    if (HtmlUtils.GetItemBoolean(Model.JobOrderCntnrFlg, num))
+                                    {
+                                        <img src="~/Content/img/truck/truck_gray.svg" alt="トラック">
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Content/img/truck/truck_gray_pre.svg" alt="トラック">
+                                    }
+                                }
+                                else if (!String.IsNullOrEmpty(HtmlUtils.GetItemString(Model.JobOrder, num)))
+                                {
+                                    if (HtmlUtils.GetItemBoolean(Model.JobOrderCntnrFlg, num))
+                                    {
+                                        <img src="~/Content/img/truck/truck_navy.svg" alt="トラック">
+                                    }
+                                    else
+                                    {
+                                        <img src="~/Content/img/truck/truck_navy_pre.svg" alt="トラック">
+                                    }
+                                }
+                                <p class="number @colorJob">@HtmlUtils.ShortCtntnrNo(HtmlUtils.GetItemString(Model.JobOrderCntnrNo, num))</p>
+                            </div>
+                            <p class="bay_number">@HtmlUtils.GetItemString(Model.JobOrderBay, num)</p>
+                        </li>
+                    }
+                </ul>
+            }
+            @if (GoStopResult.isError(Model.Result))
+            {
+                <p>@Words.Label_FetchFaild</p>
+            }
+        </div>
+
+    </section>
+
+    @*/* 進入可ポップアップダイアログ */*@
+    <div id="dlg_permit" class="dialog-modal-below">
+        <div class="permit-dialog">
+            <div id="permit_dialog" style="text-align: center; display: flex; justify-content: center; height: 240px; padding: 16px 0px 8px 0px;">
+                <table style="text-align: center; display: inline-block;">
+                    <tr>
+                        <td style="text-align: center;">
+                            <img src="~/Content/img/mark/obj_ok_circle.svg" style="height:50px;width:50px;" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center;">
+                            <div style="text-align: center; color: forestgreen; font-size: 24px; font-weight: bold;">進入可</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center;">
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center;">
+                            <div style="text-align: center;">指定レーンに進んでください</div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center;">
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: center;">
+                            <input type="button" id="dlg_ok" class="dlg-button-elliptic" style="display: inline-block;" value="OK" />
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    @Html.Partial("~/Views/_CommonDialog.cshtml")
+
+    <script type="text/javascript">
+        /*<![CDATA[*/
+        document.addEventListener('DOMContentLoaded', function () {
+            document.body.style.display = 'block';
+        });
+
+        @*/* frame内のHTMLなので、スクロールバー幅の取得にカラクリが必要 */*@
+        const setScrollbarWidth = () => {
+            var scrollbarWidth = 0;
+            if (document.body.scrollHeight > this.innerHeight) {
+                var soundWindow = window.open('', 'sound_window');
+                scrollbarWidth = soundWindow.getScrollbarWidth();
+            }
+            document.documentElement.style.setProperty('--scrollbar-width', `${scrollbarWidth}px`);
+        };
+        window.addEventListener('load', setScrollbarWidth);
+        window.addEventListener('resize', setScrollbarWidth);
+
+        @*/* アニメーションスピードを動的に変更 */*@
+        var messageLen = @(String.IsNullOrEmpty(Model.InfoMessage) ? 0 : (HtmlUtils.GetSjisBytesLen(Model.InfoMessage) + 6) * 0.140);
+        if (messageLen > 0) {
+            $('.loop_right_double').css('animation-duration', '' + messageLen + 's');
+        }
+
+        var onetimesubmitflag = true;
+
+        $(document).ready(function () {
+            if (window.performance.navigation.type == 2) {
+                @*/* ヒストリバックで戻ってきたら、強制的に元に戻す */*@
+                history.forward();
+            }
+            window.addEventListener("unload", function () { });
+            window.addEventListener("pageshow", function evt() { if (evt.persisted) { location.reload(); } });
+
+            @*/* ヒストリバックを無効に */*@
+            history.pushState(null, null, null);
+            $(window).on("popstate", function () {
+                history.go(1);
+            });
+        });
+
+        function showPermitDialog() {
+            var dialog_back = $('#dlg_permit');
+            var dialog = $('#permit_dialog');
+            var width;
+            var height;
+            if (document.documentElement.outerWidth > document.documentElement.outerHeight) {
+                var width = document.documentElement.outerWidth;
+                var height = document.documentElement.outerHeight;
+            } else {
+                var width = document.documentElement.outerHeight;
+                var height = document.documentElement.outerWidth;
+            }
+            var leftPos = ((width - dialog.outerWidth(true)) / 2);
+            var topPos = ((height - dialog.outerHeight(true)) / 2);
+            dialog.css({ "left": leftPos + "px" });
+            dialog.css({ "top": topPos + "px" });
+            @*/* タブレット、スマートフォン対応、入力不可バリアのサイズ調整 */*@
+            dialog_back.css({ "width": width + "px" });
+            dialog_back.css({ "height": height + "px" });
+            dialog_back.show();
+        }
+
+        function closePermitDialog() {
+            var dialog_back = $('#dlg_permit');
+            dialog_back.hide();
+        }
+
+        if ($('#AutoSubmitFlg').val() == '@FlagString.ON') {
+            showSearchCompletedDialog();
+        }
+
+        $("#dlg_search_completed_ok").click(function () {
+            closeSearchCompletedDialog();
+            $('#AutoSubmitFlg').val('0');
+            var soundWindow = window.open('', 'sound_window');
+            soundWindow.loadSounds(soundWindow);
+            var dlgPermit = document.getElementById("dlg_permit");
+            if (dlgPermit != null && dlgPermit.style.display == "block") {
+                soundWindow.playSoundPermit(soundWindow);
+            }
+            if ($('#ErrMode').val() == '@FlagString.ON') {
+                soundWindow.playSoundError(soundWindow);
+            }
+        });
+
+        const soundBtn = document.querySelector('.volume');
+        $("#bt_sound_test").click(function () {
+            var soundWindow = window.open('', 'sound_window');
+            if (!soundBtn.classList.contains("active")) {
+                soundWindow.loadSounds(soundWindow);
+                soundWindow.playSoundTest(soundStoped);
+                soundBtn.classList.add("active");
+            } else {
+                soundWindow.loadSounds(soundWindow);
+                soundWindow.pauseSoundTest(soundWindow);
+                soundBtn.classList.remove("active");
+            }
+        });
+        function soundStoped() {
+            soundBtn.classList.toggle("active");
+        }
+
+        $("#bt_refresh").click(function () {
+            if (onetimesubmitflag) {
+                onetimesubmitflag = false;
+                if ($('#AutoSubmitFlg').val() != '@FlagString.ON') {
+                    var soundWindow = window.open('', 'sound_window');
+                    soundWindow.pauseSoundTest(soundWindow);
+                    soundWindow.pauseSoundPermit(soundWindow);
+                    soundWindow.pauseSoundError(soundWindow);
+                    soundBtn.classList.remove("active");
+                }
+                document.forms[0].submit();
+            }
+        });
+
+        $("#bt_back").click(function () {
+            if (onetimesubmitflag) {
+                onetimesubmitflag = false;
+                if ($('#AutoSubmitFlg').val() != '@FlagString.ON') {
+                    var soundWindow = window.open('', 'sound_window');
+                    soundWindow.pauseSoundTest(soundWindow);
+                    soundWindow.pauseSoundPermit(soundWindow);
+                    soundWindow.pauseSoundError(soundWindow);
+                    soundBtn.classList.remove("active");
+                }
+                document.forms[1].submit();
+            }
+        });
+
+        checkOriental();
+
+        $("#dlg_notslideways_ok").click(function () {
+            closeNotSlidewaysDialog();
+            checkOriental();
+        });
+
+        $("#dlg_ok").click(function () {
+            closePermitDialog();
+            $("#ChangedPermission").val("@FlagString.ON");
+            stop_signal_animation();
+            $("#CheckedPermission").val("@FlagString.ON");
+        });
+
+        function stop_signal_animation() {
+            @*/* シグナルパネルのアニメーションを停止 */*@
+            $("#pnl_signal_ani").css("animation-play-state", "paused");
+            $("#pnl_signal_ani p").css("animation-play-state", "paused");
+            $("#img_flicker").css("animation-play-state", "paused");
+            $("#pnl_signal_ani").css("display", "none");
+            $("#pnl_signal").css("display", "block");
+            var soundWindow = window.open('', 'sound_window');
+            soundWindow.pauseSoundPermit(soundWindow);
+            soundWindow.pauseSoundError(soundWindow);
+        }
+
+        if (@(LaneType.isAutomation(Model.LaneType) ? "true" : "false")) {
+            @*/* 自働化レーン */*@
+            function check_truck_permit_in() {
+                @*/* 進入可否要求のポーリング */*@
+                var param = {};
+                $.ajax({
+                    url: "Lane/GetTruckPermitIn",
+                    type: "GET",
+                    data: param,
+                    content: "application/json",
+                    dataType: "json"
+                }).done(function (data, status, xhr) {
+                    if (data['EnterPermission'] == "@FlagString.ON") {
+                        $("#EnterPermission").val("@FlagString.ON");
+                        if ($('#AutoSubmitFlg').val() != '@FlagString.ON') {
+                            var soundWindow = window.open('', 'sound_window');
+                            soundWindow.pauseSoundError(soundWindow);
+                        }
+                        document.querySelector("#bt_refresh").click();
+                    } else {
+                        if (data['ErrorFlg'] == "@FlagString.ON") {
+                            if ($("#ErrMode").val() != 1) {
+                                document.querySelector("#bt_refresh").click();
+                            }
+                            $("#error_message").html(data['ErrorMessage']);
+                        } else {
+                            if ($("#ErrMode").val() == 1) {
+                                if ($('#AutoSubmitFlg').val() != '@FlagString.ON') {
+                                    var soundWindow = window.open('', 'sound_window');
+                                    soundWindow.pauseSoundError(soundWindow);
+                                }
+                                document.querySelector("#bt_refresh").click();
+                            }
+                        }
+                    }
+                }).fail(function (xhr, status, error) {
+                }).always(function (data, status, xhr) {
+                    if ($("#EnterPermission").val() != "@FlagString.ON") {
+                        setTimeout(check_truck_permit_in, @Model.ItvTruckPermitIn);
+                    }
+                });
+            }
+
+            if ($("#EnterPermission").val() != "@FlagString.ON") {
+                setTimeout(check_truck_permit_in, @Model.ItvTruckPermitIn);
+            }
+
+            if ($("#EnterPermission").val() == "@FlagString.ON" && $("#ChangedPermission").val() != "@FlagString.ON") {
+                showPermitDialog();
+            }
+            if ($("#EnterPermission").val() == "@FlagString.ON" && $("#CheckedPermission").val() != "@FlagString.ON") {
+                if ($('#AutoSubmitFlg').val() != '@FlagString.ON') {
+                    var soundWindow = window.open('', 'sound_window');
+                    soundWindow.pauseSoundError(soundWindow);
+                    soundWindow.playSoundPermit(soundWindow);
+                }
+            }
+            if ($("#EnterPermission").val() == "@FlagString.ON" && $("#CheckedPermission").val() == "@FlagString.ON") {
+                stop_signal_animation();
+            }
+        }
+        else
+        {
+            @*/* 有人レーン or 空バンレーン */*@
+            if ($("#ChangedPermission").val() != "@FlagString.ON") {
+                showPermitDialog();
+            }
+            if ($("#CheckedPermission").val() != "@FlagString.ON") {
+                if ($('#AutoSubmitFlg').val() != '@FlagString.ON') {
+                    var soundWindow = window.open('', 'sound_window');
+                    soundWindow.playSoundPermit(soundWindow);
+                }
+            }
+            if ($("#CheckedPermission").val() == "@FlagString.ON") {
+                stop_signal_animation();
+            }
+        }
+
+        if (@((Model.ErrMode == 1) ? "true" : "false")) {
+            if ($('#AutoSubmitFlg').val() != '@FlagString.ON') {
+                var soundWindow = window.open('', 'sound_window');
+                soundWindow.playSoundError(soundWindow);
+            }
+        }
+
+        $("#pnl_signal_ani").click(function () {
+            stop_signal_animation();
+            $("#CheckedPermission").val("@FlagString.ON");
+        });
+
+        @*/* 指定msec.毎にレーン状況表示データを更新 */*@
+        setTimeout(function () {
+            document.querySelector("#bt_refresh").click();
+        }, @Model.ItvLaneAllJob);
+
+        /*]]>*/
+    </script>
+
 </body>
-</html>
+
+
