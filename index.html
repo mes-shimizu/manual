@@ -1,9 +1,3 @@
-﻿@using TruckerView.Models
-@using TruckerView.Define
-@using TruckerView.Utils
-
-@model TruckerViewLaneModel
-
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
@@ -27,7 +21,8 @@
     <link href="~/Content/web_font_Roboto-Condensed/font.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/css/common/common.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/css/header_lane.css" rel="stylesheet" type="text/css" />
-    @if (LaneType.isAutomation(Model.LaneType))
+    <link href="~/Content/css/lane_remote_ng.css" rel="stylesheet" type="text/css" />
+<!--     @if (LaneType.isAutomation(Model.LaneType))
     {
         if (!FlagString.isOn(Model.EnterPermission))
         {
@@ -50,35 +45,35 @@
     {
         <link href="~/Content/css/lane_remote_ok.css" rel="stylesheet" type="text/css" />
     }
-    <link rel="stylesheet" href="~/Content/css/trucker-view.css" />
+    <link rel="stylesheet" href="~/Content/css/trucker-view.css" /> -->
     @Scripts.Render("~/Content/js/jquery-3.6.1.min.js")
 </head>
 <body style="display: none;">
 
-    @Html.Partial("~/Views/_SpOrientationWarning.cshtml")
+<!--     @Html.Partial("~/Views/_SpOrientationWarning.cshtml") -->
 
     <form action="~/Lane" method="post" target="_self">
-        @Html.AntiForgeryToken()
-        <input type="hidden" id="TruckNo" name="TruckNo" value="@Model.TruckNo" />
-        <input type="hidden" id="EnterPermission" name="EnterPermission" value="@Model.EnterPermission" />
-        <input type="hidden" id="ChangedPermission" name="ChangedPermission" value="@Model.ChangedPermission" />
-        <input type="hidden" id="CheckedPermission" name="CheckedPermission" value="@Model.CheckedPermission" />
-        <input type="hidden" id="SelfPost" name="SelfPost" value="@FlagString.ON" />
-        <input type="hidden" id="AutoSubmitFlg" name="AutoSubmitFlg" value="@Model.AutoSubmitFlg" />
+<!--         @Html.AntiForgeryToken() -->
+        <input type="hidden" id="TruckNo" name="TruckNo" value="SZ203" />
+        <input type="hidden" id="EnterPermission" name="EnterPermission" value="1" />
+<!--         <input type="hidden" id="ChangedPermission" name="ChangedPermission" value="@Model.ChangedPermission" />
+        <input type="hidden" id="CheckedPermission" name="CheckedPermission" value="@Model.CheckedPermission" /> -->
+        <input type="hidden" id="SelfPost" name="SelfPost" value="1" />
+        <input type="hidden" id="AutoSubmitFlg" name="AutoSubmitFlg" value="1" />
     </form>
     <form action="~/Lane/Back" method="get" target="_self">
     </form>
-    <input type="hidden" id="ErrMode" name="ErrMode" value="@Model.ErrMode" />
+    <input type="hidden" id="ErrMode" name="ErrMode" value="2" />
     <header class="header_lane">
         <div class="header_wrap">
             <h1 class="eng bold blue">
                 <img class="logo_title" src="~/Content/img/common/illust_track_title.svg" alt="トラックアイコン">
                 TRUCKER VIEW
-                <span class="jap normal black small">VERSION-@Model.TruckerViewVersion</span>
-                <span class="jap normal black small">RELEASE-@Model.ReleaseDate</span>
+                <span class="jap normal black small">VERSION-1.0.0</span>
+                <span class="jap normal black small">RELEASE-2024.07.29</span>
             </h1>
             <div class="port_name eng bold bg_blue white">Shimizu Container Terminal</div>
-            <div class="update_time jap t_right">[ 更新日時 ]@Model.Timestamp.ToString("yyyy.M.d-HH:mm:ss")</div>
+            <div class="update_time jap t_right">[ 更新日時 ]2024.8.5-10:27:53</div>
             <div class="company_logo no_repeat"></div>
             <div class="return">
                 <button class="white" id="bt_back">
